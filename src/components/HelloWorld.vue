@@ -2,41 +2,70 @@
   <v-container>
     <h2>{{ title }}</h2>           
     <v-text-field label="Enter your name" :disabled="flag" v-model="name" @keydown.enter="changeFlag"></v-text-field>
-    <v-btn rounded="xl" size="x-large" block @click="changeFlag">Click Me</v-btn>
+    <v-btn rounded="xl" size="x-large" block @click="changeFlag" color="primary">Click Me</v-btn>
     <br>
-    <h3> Hello: {{ name }}</h3>
+    <h3 > Hello: {{ name }}</h3>
     <br>
-
-    <table border="2" >
+    <v-text-field label="What do you do?"  v-model="description" ></v-text-field>
+    <v-text-field label="How long it takes?" v-model="duration"></v-text-field>
+    <v-btn @click="addToDo">Add</v-btn>   <v-btn @click="deleteToDo">Delete</v-btn>  
+  <v-table>
+    <thead>
       <tr>
-        <th>Descirption</th>
-        <th>Duration</th>
-        <th>Date</th>
+        <th class="text-left">
+          Description
+        </th>
+        <th class="text-left">
+          Duration
+        </th>
+        <th class="text-left">
+          Date
+        </th>
+        <th class="text-left">
+          Remark
+        </th>
       </tr>
-      <tr v-for="todo in list" :key="todo.des">
-        <td>{{ todo.des }}</td>
+    </thead>
+    <tbody>
+      <tr
+        v-for="todo in list"
+        :key="todo.des"
+      >
+         <td>{{ todo.des }}</td>
         <td>{{ todo.time }} hours</td>
-        <td>{{ todo.date }}</td>
+        <td>{{ todo.date }} </td>
+        <td v-if=" todo.time <=2 " >Active </td>
+        <td v-else> Tired </td>
       </tr>
-    </table>
+    </tbody>
+  </v-table>
+
   </v-container>
 </template>
 <script>
 
 export default {
   name: 'HelloWorld',
-  data: () => ({    
+  data: () => ({   
     title:"This is First Vue Test.",
     flag:true,
     name:"",
     list:[
-      {des: "Learning Vue", time: 2, date: new Date()},
-      {des: "Shopping", time: 3, date: new Date()}
-    ]
+      {des: "Learning Vue", time: 2, date: new Date().toDateString()},
+      {des: "Shopping", time: 3, date: new Date().toDateString()}
+    ],
+    description:"",
+    duration:0
   }),
   methods:{
     changeFlag(){
       this.flag=!this.flag
+    },
+    addToDo(){
+      this.list.push({des:this.description,time:this.duration, date: new Date().toDateString()})      
+    },
+    deleteToDo(){
+      this.list.pop();
     }
   }
 }
